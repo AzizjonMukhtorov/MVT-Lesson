@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lotus — свежие цветы и доставка букетов по Душанбе.">
+    <title>Lotus — доставка цветов в Душанбе</title>
+
+    <style>
+        :root {
+            --coral: #e97670;
+            --coral-dark: #cf5955;
+            --coral-light: #fff0ed;
+            --ink: #292525;
+            --muted: #797474;
+            --border: #eee7e2;
+            --page: #fefcfb;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            background: var(--page);
+            color: var(--ink);
+            font: 16px/1.5 Arial, Helvetica, sans-serif;
+        }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; width: 100%; }
+        h1, h2, h3, p { margin: 0; }
+        h1, h2, h3, .logo { font-family: Georgia, 'Times New Roman', serif; }
+        .container { width: min(100% - 40px, 1180px); margin: 0 auto; }
+        .section { padding: 72px 0 0; }
+        .section-label {
+            color: var(--coral-dark);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .13em;
+            margin-bottom: 8px;
+        }
+        .section-title { font-size: clamp(28px, 3vw, 38px); line-height: 1.18; }
+        .section-head { margin-bottom: 26px; }
+
+        .site-header { background: #fff; border-bottom: 1px solid var(--border); }
+        .header-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .logo { display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 700; }
+        .logo-mark {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--coral);
+            color: #fff;
+            font-size: 19px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 28px; font-size: 14px; }
+        .header-nav a:hover, .footer-links a:hover { color: var(--coral-dark); }
+        .header-contact { color: var(--coral-dark); font-weight: 700; white-space: nowrap; font-size: 14px; }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 60px;
+            padding-top: 65px;
+            padding-bottom: 65px;
+        }
+        .hero h1 { max-width: 530px; font-size: clamp(38px, 4.7vw, 64px); line-height: 1.09; }
+        .hero p { color: var(--muted); max-width: 450px; font-size: 18px; margin-top: 22px; }
+        .hero-img { aspect-ratio: 1 / 1; overflow: hidden; border-radius: 18px; background: var(--coral-light); }
+        .hero-img img { height: 100%; object-fit: cover; }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 11px 24px;
+            background: var(--coral);
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            transition: background .2s;
+        }
+        .button:hover { background: var(--coral-dark); }
+        .hero .button { margin-top: 30px; }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .benefit { display: flex; gap: 14px; align-items: center; padding: 20px; }
+        .benefit + .benefit { border-left: 1px solid var(--border); }
+        .benefit-icon {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            border-radius: 50%;
+            background: var(--coral-light);
+            font-size: 21px;
+        }
+        .benefit strong { display: block; font-size: 14px; }
+        .benefit span { display: block; font-size: 12px; color: var(--muted); }
+
+        .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+        .product-card, .category-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            overflow: hidden;
+            min-width: 0;
+        }
+        .product-image, .category-image { position: relative; aspect-ratio: 1 / 1; background: var(--coral-light); }
+        .product-image img, .category-image img { height: 100%; object-fit: cover; }
+        .image-placeholder { display: grid; place-items: center; width: 100%; height: 100%; font-size: 60px; }
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            border-radius: 5px;
+            background: var(--coral);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .product-info { display: flex; flex-direction: column; gap: 9px; padding: 16px; }
+        .product-info h3 { font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 600; line-height: 1.45; }
+        .product-price { font-family: Georgia, 'Times New Roman', serif; font-size: 21px; font-weight: 700; }
+        .category-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+        .category-info { padding: 14px 16px 18px; }
+        .category-info h3 { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; }
+        .empty-message {
+            grid-column: 1 / -1;
+            padding: 30px;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .cta {
+            margin-top: 72px;
+            padding: 45px 50px;
+            background: var(--coral);
+            border-radius: 16px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
+        .cta h2 { font-size: clamp(28px, 3vw, 38px); line-height: 1.18; }
+        .cta p { margin-top: 10px; color: #fff9; max-width: 540px; }
+        .cta .button { flex-shrink: 0; background: #fff; color: var(--coral-dark); }
+        .cta .button:hover { background: #fff4f2; }
+        .site-footer { margin-top: 76px; padding: 30px 0; background: #fff; border-top: 1px solid var(--border); }
+        .footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
+        .footer-note { font-size: 13px; color: var(--muted); }
+        .footer-links { display: flex; gap: 22px; font-size: 13px; }
+
+        @media (max-width: 850px) {
+            .hero { gap: 30px; }
+            .product-grid, .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .benefits { grid-template-columns: 1fr; }
+            .benefit + .benefit { border-left: 0; border-top: 1px solid var(--border); }
+            .cta { padding: 32px; }
+        }
+        @media (max-width: 620px) {
+            .container { width: min(100% - 28px, 1180px); }
+            .header-inner { min-height: 65px; }
+            .header-nav { gap: 12px; }
+            .header-contact { display: none; }
+            .hero { grid-template-columns: 1fr; padding-top: 24px; padding-bottom: 38px; }
+            .hero-img { grid-row: 1; }
+            .hero p { font-size: 16px; margin-top: 14px; }
+            .section { padding-top: 50px; }
+            .product-grid, .category-grid { gap: 12px; }
+            .product-info { padding: 12px; }
+            .product-info h3 { font-size: 13px; }
+            .product-price { font-size: 18px; }
+            .category-info { padding: 12px; }
+            .cta { flex-direction: column; align-items: flex-start; margin-top: 50px; padding: 28px; }
+            .site-footer { margin-top: 50px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="logo" href="/" aria-label="Lotus — главная">
+                <span class="logo-mark">L</span> Lotus
+            </a>
+            <nav class="header-nav" aria-label="Основная навигация">
+                <a href="{% url 'flowers' %}">Букеты</a>
+                <a href="#categories">Категории</a>
+            </nav>
+
+            {% if not request.user.is_authenticated %}
+                    <a class="header-contact" href="{% url 'login' %}" rel="noopener noreferrer">Логин</a>
+            {% else %}
+                {% if request.user.is_staff %}
+                    <a class="header-contact" href="" rel="noopener noreferrer">Админ</a>
+                {% endif %}
+                    <a href="#categories">{{ request.user }}</a>
+                    <a class="header-contact" href="{% url 'logout' %}" rel="noopener noreferrer">Выход</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main>
+        <section class="container hero">
+            <div>
+                <h1>Букеты, которые радуют каждого</h1>
+                <p>Свежие цветы от наших флористов. Фото перед отправкой, анонимная доставка.</p>
+                <a class="button" href="#flowers">Выбрать букет</a>
+            </div>
+            <div class="hero-img">
+                <img src="https://lotuss.tj/api/files/site/2026-05-hero-image-0d5f.webp" alt="Букет цветов Lotus">
+            </div>
+        </section>
+
+        <section class="container benefits" aria-label="Наши преимущества">
+            <div class="benefit">
+                <div class="benefit-icon" aria-hidden="true">⚡</div>
+                <div><strong>Доставка 2–3 часа</strong><span>По всему Душанбе</span></div>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon" aria-hidden="true">📷</div>
+                <div><strong>Фото перед отправкой</strong><span>Покажем готовый букет</span></div>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon" aria-hidden="true">💬</div>
+                <div><strong>Заказ через WhatsApp</strong><span>Быстрое подтверждение</span></div>
+            </div>
+        </section>
+
+        <section class="container section" id="flowers">
+            <div class="section-head">
+                <div class="section-label">Наши букеты</div>
+                <h2 class="section-title">Что заказывают чаще всего</h2>
+            </div>
+
+            <div class="product-grid">
+                {% for flower in flowers %}
+                    <article class="product-card">
+                        <div class="product-image">
+                            {% if flower.image %}
+                                <img src="{{ flower.image.url }}" alt="{{ flower.name }}" loading="lazy">
+                            {% else %}
+                                <div class="image-placeholder" aria-hidden="true">💐</div>
+                            {% endif %}
+                            {% if flower.is_new %}
+                                <span class="product-badge">Новинка</span>
+                            {% endif %}
+                        </div>
+                        <div class="product-info">
+                            <h3>{{ flower.name }}</h3>
+                            <p class="product-price">{{ flower.price|floatformat:0 }} сом.</p>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="empty-message">Сейчас нет доступных букетов.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="container section" id="categories">
+            <div class="section-head">
+                <div class="section-label">Категории</div>
+                <h2 class="section-title">Что ищете сегодня?</h2>
+            </div>
+
+            <div class="category-grid">
+                {% for category in categories %}
+                    <article class="category-card">
+                        <div class="category-image">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}" loading="lazy">
+                            {% else %}
+                                <div class="image-placeholder" aria-hidden="true">🌷</div>
+                            {% endif %}
+                        </div>
+                        <div class="category-info">
+                            <h3>{{ category.title }}</h3>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="empty-message">Категории пока не добавлены.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="container cta">
+            <div>
+                <h2>Не знаете, что выбрать?</h2>
+                <p>Напишите менеджеру в WhatsApp — поможем подобрать букет для любого повода.</p>
+            </div>
+            <a class="button" href="https://wa.me/992750545471" target="_blank" rel="noopener noreferrer">Написать в WhatsApp</a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>
+                <a class="logo" href="/"><span class="logo-mark">L</span> Lotus</a>
+                <p class="footer-note">© 2026 Lotus · Душанбе</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://wa.me/992750545471" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href="tel:+992750545471">+992 750 54 54 71</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

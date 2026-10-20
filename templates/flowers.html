@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Каталог свежих цветов и букетов Lotus с доставкой по Душанбе.">
+    <title>Каталог цветов — Lotus</title>
+
+    <style>
+        :root {
+            --coral: #e97670;
+            --coral-dark: #cf5955;
+            --coral-light: #fff0ed;
+            --ink: #292525;
+            --muted: #797474;
+            --border: #eee7e2;
+            --page: #fefcfb;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            background: var(--page);
+            color: var(--ink);
+            font: 16px/1.5 Arial, Helvetica, sans-serif;
+        }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+        h1, h2, h3, p { margin: 0; }
+        h1, h2, h3, .logo, .product-price { font-family: Georgia, 'Times New Roman', serif; }
+        button, input { font: inherit; }
+        button { cursor: pointer; }
+        :focus-visible { outline: 3px solid var(--coral-dark); outline-offset: 3px; }
+        .container { width: min(100% - 40px, 1180px); margin: 0 auto; }
+
+        .site-header { background: #fff; border-bottom: 1px solid var(--border); }
+        .header-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .logo { display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 700; }
+        .logo-mark {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--coral);
+            color: #fff;
+            font-size: 19px;
+        }
+        .header-nav { display: flex; align-items: center; gap: 28px; font-size: 14px; }
+        .header-nav a:hover { color: var(--coral-dark); }
+        .header-nav .active { color: var(--coral-dark); font-weight: 700; }
+        .header-contact { color: var(--coral-dark); font-weight: 700; white-space: nowrap; font-size: 14px; }
+
+        .catalog { padding-top: 48px; padding-bottom: 28px; }
+        .eyebrow {
+            color: var(--coral-dark);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .13em;
+            margin-bottom: 8px;
+        }
+        .catalog h1 { font-size: clamp(34px, 4vw, 48px); line-height: 1.16; }
+        .catalog-subtitle { color: var(--muted); margin-top: 12px; font-size: 15px; }
+
+        .filters {
+            display: grid;
+            grid-template-columns: minmax(220px, 2fr) minmax(120px, 1fr) minmax(120px, 1fr) auto;
+            gap: 15px;
+            align-items: end;
+            margin-top: 34px;
+            padding: 22px;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 12px;
+        }
+        .field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+        .field label { font-size: 12px; font-weight: 700; color: var(--ink); }
+        .field input {
+            width: 100%;
+            height: 44px;
+            padding: 0 13px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: #fff;
+            color: var(--ink);
+            outline-color: var(--coral-dark);
+            font-size: 14px;
+        }
+        .field input::placeholder { color: #aaa1a0; }
+        .field input:hover { border-color: #d8cbc5; }
+        .filter-actions { display: flex; align-items: center; gap: 12px; }
+        .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 44px;
+            padding: 10px 19px;
+            border: 0;
+            border-radius: 7px;
+            background: var(--coral);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            transition: background-color .2s;
+            white-space: nowrap;
+        }
+        .button:hover { background: var(--coral-dark); }
+        .reset-link { font-size: 13px; color: var(--muted); white-space: nowrap; }
+        .reset-link:hover { color: var(--coral-dark); }
+        .filter-bottom { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+        .checkbox-label { display: inline-flex; gap: 10px; align-items: center; font-size: 14px; cursor: pointer; }
+        .checkbox-label input { width: 17px; height: 17px; margin: 0; accent-color: var(--coral-dark); }
+
+        .results-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            padding: 34px 0 18px;
+        }
+        .results-top h2 { font-size: clamp(23px, 3vw, 29px); }
+        .result-count { font-size: 13px; color: var(--muted); }
+        .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+        .product-card {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #fff;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .product-card:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(45, 35, 35, .06); }
+        .product-image { position: relative; aspect-ratio: 1; overflow: hidden; background: var(--coral-light); }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+        .product-card:hover .product-image img { transform: scale(1.035); }
+        .image-placeholder {
+            display: grid;
+            place-items: center;
+            height: 100%;
+            color: var(--coral-dark);
+            font-size: 48px;
+        }
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            border-radius: 5px;
+            color: #fff;
+            background: #45988c;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        /* Круглая кнопка лайка поверх фото, как в примере */
+        .like-form, .like-guest { position: absolute; top: 12px; right: 12px; z-index: 2; margin: 0; }
+        .like-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 37px;
+            height: 37px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            background: #fff;
+            color: #a7a7a7;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, .06);
+            transition: color .2s, transform .2s, background .2s;
+        }
+        .like-button svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+        .like-button:hover { transform: scale(1.07); color: #ff0066; }
+        .like-button.is-liked { color: #ff0066; }
+        .like-button.is-liked svg { fill: currentColor; }
+        .like-button:disabled { opacity: .65; cursor: wait; }
+        .product-info { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 15px; }
+        .product-info h3 { font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 600; line-height: 1.4; }
+        .product-description { font-size: 12px; color: var(--muted); line-height: 1.55; }
+        .product-bottom { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+        .product-price { font-size: 21px; font-weight: 700; line-height: 1.15; }
+        .order-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 38px;
+            border: 1px solid var(--coral);
+            border-radius: 6px;
+            color: var(--coral-dark);
+            font-size: 12px;
+            font-weight: 700;
+            transition: color .2s, background .2s;
+        }
+        .order-link:hover { color: #fff; background: var(--coral); }
+        .empty-message {
+            grid-column: 1 / -1;
+            padding: 65px 18px;
+            background: #fff;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .empty-message h3 { font-size: 26px; }
+        .empty-message p { color: var(--muted); margin: 12px 0 22px; font-size: 14px; }
+        .empty-message .button { margin: 0 auto; }
+
+        .site-footer { margin-top: 76px; padding: 30px 0; background: #fff; border-top: 1px solid var(--border); }
+        .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 18px; }
+        .footer-note { font-size: 13px; color: var(--muted); }
+        .footer-links { display: flex; gap: 22px; font-size: 13px; }
+        .footer-links a:hover { color: var(--coral-dark); }
+
+        @media (max-width: 1000px) {
+            .filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .field.search-field { grid-column: 1 / -1; }
+            .filter-actions { justify-self: start; }
+            .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (max-width: 720px) {
+            .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+            .filters { grid-template-columns: 1fr 1fr; padding: 16px; gap: 13px; }
+            .field.search-field { grid-column: 1 / -1; }
+            .filter-actions { grid-column: 1 / -1; }
+            .filter-bottom { grid-row: 3; }
+        }
+        @media (max-width: 520px) {
+            .container { width: min(100% - 28px, 1180px); }
+            .header-inner { min-height: 65px; }
+            .header-nav { gap: 13px; }
+            .header-contact { display: none; }
+            .catalog { padding-top: 28px; }
+            .catalog-subtitle { font-size: 14px; }
+            .filters { margin-top: 24px; }
+            .filter-bottom { grid-row: auto; }
+            .results-top { padding-top: 28px; }
+            .product-info { padding: 12px; }
+            .product-info h3 { font-size: 13px; }
+            .product-description { display: none; }
+            .product-price { font-size: 18px; }
+            .product-badge { top: 8px; left: 8px; font-size: 10px; padding: 3px 7px; }
+            .like-form, .like-guest { top: 12px; right: 12px; }
+            .order-link { font-size: 11px; }
+            .site-footer { margin-top: 48px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="logo" href="/" aria-label="Lotus — главная">
+                <span class="logo-mark">L</span> Lotus
+            </a>
+            <nav class="header-nav" aria-label="Основная навигация">
+                <a href="/">Главная</a>
+                <a class="active" href="" aria-current="page">Каталог</a>
+            </nav>
+            <a class="header-contact" href="https://wa.me/992750545471" target="_blank" rel="noopener noreferrer">
+                Логин
+            </a>
+        </div>
+    </header>
+
+    <main class="container catalog">
+        <p class="eyebrow">Каталог Lotus</p>
+        <h1>Выберите свой букет</h1>
+        <p class="catalog-subtitle">Свежие цветы с доставкой по Душанбе.</p>
+
+        <!-- Фильтры отправляются в get_flowers через GET. URL указывать не требуется. -->
+        <form class="filters" method="get" action="" role="search">
+            <div class="field search-field">
+                <label for="search">Поиск по названию или описанию</label>
+                <input
+                    id="search"
+                    type="search"
+                    name="search"
+                    value="{{ request.GET.search|default:'' }}"
+                    placeholder="Найти букет или цветок"
+                >
+            </div>
+            <div class="field">
+                <label for="min-price">Цена от, сомони</label>
+                <input
+                    id="min-price"
+                    type="number"
+                    name="min_price"
+                    min="0"
+                    step="0.01"
+                    inputmode="decimal"
+                    value="{{ request.GET.min_price|default:'' }}"
+                    placeholder="От"
+                >
+            </div>
+            <div class="field">
+                <label for="max-price">Цена до, сомони</label>
+                <input
+                    id="max-price"
+                    type="number"
+                    name="max_price"
+                    min="0"
+                    step="0.01"
+                    inputmode="decimal"
+                    value="{{ request.GET.max_price|default:'' }}"
+                    placeholder="До"
+                >
+            </div>
+            <div class="filter-actions">
+                <button class="button" type="submit">Показать</button>
+                <a class="reset-link" href="?">Сбросить</a>
+            </div>
+            <div class="filter-bottom">
+                <label class="checkbox-label" for="new-only">
+                    <input
+                        id="new-only"
+                        type="checkbox"
+                        name="new"
+                        value="1"
+                        {% if request.GET.new %}checked{% endif %}
+                    >
+                    Только новинки
+                </label>
+            </div>
+        </form>
+
+        <div class="results-top">
+            <h2>Все букеты</h2>
+            <p class="result-count">Найдено: {{ flowers|length }}</p>
+        </div>
+
+        <section class="product-grid" aria-label="Список букетов">
+            {% for flower in flowers %}
+                <article class="product-card">
+                    <div class="product-image">
+                        {% if flower.image %}
+                            <img src="{{ flower.image.url }}" alt="{{ flower.title }}" loading="lazy">
+                        {% else %}
+                            <div class="image-placeholder" aria-label="Изображение отсутствует">✿</div>
+                        {% endif %}
+                        {% if flower.is_new %}
+                            <span class="product-badge">Новинка</span>
+                        {% endif %}
+
+                        {% if request.user.is_authenticated %}
+                            <form
+                                class="like-form"
+                                method="post"
+                                action="{% if flower.id in likes %}{% url 'delete_like' flower.id %}{% else %}{% url 'create_like' flower.id %}{% endif %}"
+                                data-like-url="{% url 'create_like' flower.id %}"
+                                data-unlike-url="{% url 'delete_like' flower.id %}"
+                            >
+                                {% csrf_token %}
+                                <button
+                                    type="submit"
+                                    class="like-button{% if flower.id in likes %} is-liked{% endif %}"
+                                    aria-label="{% if flower.id in likes %}Убрать из избранного{% else %}Добавить в избранное{% endif %}: {{ flower.title }}"
+                                    aria-pressed="{% if flower.id in likes %}true{% else %}false{% endif %}"
+                                    title="{% if flower.id in likes %}Убрать из избранного{% else %}Добавить в избранное{% endif %}"
+                                >
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        {% else %}
+                            <div class="like-guest">
+                                <button type="button" class="like-button" data-login-required aria-label="Войдите, чтобы добавить в избранное" title="Войдите, чтобы поставить лайк">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h3><a href="{% url 'flower_detail' flower.id %}">{{ flower.title }}</a></h3>
+                        {% if flower.description %}
+                            <p class="product-description">{{ flower.description|striptags|truncatechars:88 }}</p>
+                        {% endif %}
+                        <div class="product-bottom">
+                            <p class="product-price">{{ flower.price }} сом.</p>
+                            {% with message="Здравствуйте! Хочу заказать букет: "|add:flower.title %}
+                                <a
+                                    class="order-link"
+                                    href="https://wa.me/992750545471?text={{ message|urlencode }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Заказать {{ flower.title }} в WhatsApp"
+                                >Заказать в WhatsApp</a>
+                            {% endwith %}
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="empty-message">
+                    <h3>Букеты не найдены</h3>
+                    <p>Попробуйте изменить параметры поиска или сбросить фильтры.</p>
+                    <a class="button" href="?">Сбросить фильтры</a>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p class="footer-note">© 2026 Lotus · Душанбе</p>
+            <div class="footer-links">
+                <a href="/">Главная</a>
+                <a href="https://wa.me/992750545471" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href="tel:+992750545471">+992 75 054 54 71</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Лайк обновляется через fetch: нет перезагрузки и прокрутка не сбрасывается.
+        document.querySelectorAll('.like-form').forEach(form => {
+            form.addEventListener('submit', async event => {
+                event.preventDefault();
+                const button = form.querySelector('.like-button');
+                if (button.disabled) return;
+                button.disabled = true;
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        credentials: 'same-origin',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    });
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!response.ok || !contentType.includes('application/json')) {
+                        throw new Error('Не удалось обновить лайк');
+                    }
+                    const result = await response.json();
+                    if (typeof result.liked !== 'boolean') {
+                        throw new Error('Некорректный ответ сервера');
+                    }
+
+                    const liked = result.liked;
+                    button.classList.toggle('is-liked', liked);
+                    button.setAttribute('aria-pressed', String(liked));
+                    button.title = liked ? 'Убрать из избранного' : 'Добавить в избранное';
+                    button.setAttribute('aria-label', button.title);
+                    form.action = liked ? form.dataset.unlikeUrl : form.dataset.likeUrl;
+                } catch (error) {
+                    console.error(error);
+                    alert('Не удалось сохранить лайк. Попробуйте ещё раз.');
+                } finally {
+                    button.disabled = false;
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-login-required]').forEach(button => {
+            button.addEventListener('click', () => alert('Для избранного войдите в аккаунт.'));
+        });
+    </script>
+</body>
+</html>

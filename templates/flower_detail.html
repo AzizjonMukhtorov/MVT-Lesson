@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+{% load l10n %}
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ flower.title }} — доставка цветов в Душанбе | Lotus">
+  <title>{{ flower.title }} — Lotus</title>
+  <style>
+    :root { --coral:#ff1763; --coral-dark:#dd0950; --text:#262328; --muted:#77727a; --line:#eae4e5; --soft:#fbf8f7; --mint:#18b794; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--text); background:#fff; font-family:Arial,Helvetica,sans-serif; line-height:1.55; }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; cursor:pointer; }
+    .container { max-width:1280px; margin:0 auto; padding:0 32px; }
+    .topbar { border-bottom:1px solid var(--line); background:white; }
+    .topbar-inner { min-height:76px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    .brand { display:inline-flex; gap:9px; align-items:center; font:700 27px Georgia,'Times New Roman',serif; white-space:nowrap; }
+    .brand-icon { height:30px; width:30px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; color:#fff; background:var(--coral); font:700 20px Georgia,serif; }
+    .header-right { display:flex; align-items:center; gap:20px; font-size:14px; }
+    .muted { color:var(--muted); }
+    .header-right a:hover, .breadcrumbs a:hover { color:var(--coral); }
+    .navbar { padding:10px 0; border-bottom:1px solid var(--line); }
+    .nav-links { display:flex; gap:12px; }
+    .nav-links a { border:1px solid var(--line); border-radius:7px; padding:9px 20px; font-weight:600; font-size:14px; }
+    .nav-links a:hover { border-color:var(--coral); color:var(--coral); }
+    .breadcrumbs { display:flex; gap:10px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:13px; padding:28px 0 23px; }
+    .breadcrumbs span:last-child { color:var(--text); font-weight:600; }
+    .product { display:grid; grid-template-columns:minmax(0,1.07fr) minmax(0,.93fr); gap:55px; align-items:start; }
+    .image-box { border:1px solid var(--line); border-radius:13px; overflow:hidden; aspect-ratio:1 / 1; position:relative; background:var(--soft); }
+    .image-box img { width:100%; height:100%; object-fit:cover; display:block; }
+    .empty-image { height:100%; display:flex; align-items:center; justify-content:center; font-size:95px; color:#eeacc1; }
+    .badge { display:inline-flex; background:var(--mint); color:#fff; border-radius:5px; font-size:12px; text-transform:uppercase; letter-spacing:.04em; font-weight:700; padding:5px 11px; }
+    .image-box .badge { position:absolute; top:15px; left:15px; }
+    h1,h2,h3 { font-family:Georgia,'Times New Roman',serif; line-height:1.16; }
+    h1 { margin:8px 0 19px; font-size:clamp(30px,3.2vw,45px); overflow-wrap:anywhere; }
+    h2 { font-size:27px; margin:0 0 22px; }
+    .desc { color:var(--muted); line-height:1.7; margin:0 0 25px; overflow-wrap:anywhere; }
+    .price { font:700 43px Georgia,serif; margin-bottom:26px; }
+    .purchase { display:flex; gap:12px; align-items:stretch; margin-bottom:20px; }
+    .counter { display:flex; align-items:center; border-radius:28px; background:#f7f3f2; overflow:hidden; flex:none; }
+    .counter button { width:43px; height:50px; border:0; background:transparent; font-size:24px; color:var(--text); }
+    .counter button:hover { color:var(--coral); }
+    .counter output { min-width:34px; text-align:center; font-weight:700; font-size:16px; }
+    .buy { flex:1; min-width:0; border:0; border-radius:7px; background:var(--coral); color:white; padding:13px 17px; font-size:15px; font-weight:700; text-align:center; }
+    .buy:hover { background:var(--coral-dark); }
+    .total { color:var(--muted); font-size:14px; margin:-3px 0 18px; }
+    .total strong { color:var(--text); }
+    .promises { border:1px solid var(--line); border-radius:8px; padding:20px; display:grid; gap:16px; background:#fff; font-size:14px; }
+    .promise { display:flex; gap:12px; align-items:flex-start; }
+    .promise-icon { color:var(--coral); font-size:22px; min-width:28px; line-height:1.3; }
+    .below { max-width:700px; margin:68px 0 75px; }
+    .care { padding:28px; border:1px solid var(--line); border-radius:11px; }
+    .care-item { display:flex; gap:14px; margin:18px 0; align-items:flex-start; font-size:14px; }
+    .care-item:last-child { margin-bottom:0; }
+    .care-item .circle { background:#ffe8ef; border-radius:50%; width:35px; height:35px; display:grid; place-items:center; flex:none; color:var(--coral); }
+    .care-item p { margin:3px 0 0; color:var(--muted); }
+    footer { border-top:1px solid var(--line); padding:34px 0; color:var(--muted); font-size:13px; }
+    .foot { display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap; align-items:center; }
+    @media (max-width:800px) { .container { padding:0 17px; } .product { grid-template-columns:1fr; gap:25px; } .breadcrumbs { padding:18px 0; } h1 { font-size:31px; } .price { font-size:35px; } .below { margin:40px 0 50px; } .header-right .city { display:none; } }
+    @media (max-width:400px) { .purchase { gap:8px; } .counter button { width:37px; } .buy { padding:11px 10px; font-size:13px; } .nav-links a { padding:9px 15px; } .topbar-inner { min-height:65px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="/"><span class="brand-icon">L</span> Lotus</a>
+      <div class="header-right"><span class="city muted">📍 Душанбе</span><a href="tel:+992750545471">+992 75 054 54 71</a></div>
+    </div>
+  </header>
+  <nav class="navbar" aria-label="Основное меню"><div class="container nav-links"><a href="{% url 'flowers' %}">Каталог</a><a href="https://wa.me/992750545471" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></nav>
+
+  <main class="container">
+    <nav class="breadcrumbs" aria-label="Навигационная цепочка">
+      <a href="/">Главная</a><span>›</span><a href="{% url 'flowers' %}">Каталог</a><span>›</span><span>{{ flower.title }}</span>
+    </nav>
+
+    <section class="product" aria-labelledby="flower-title">
+      <div class="image-box">
+        {% if flower.image %}
+          <img src="{{ flower.image.url }}" alt="{{ flower.title }}">
+        {% else %}
+          <div class="empty-image" role="img" aria-label="Фото отсутствует">✿</div>
+        {% endif %}
+        {% if flower.is_new %}<span class="badge">Новинка</span>{% endif %}
+      </div>
+
+      <div>
+        <h1 id="flower-title">{{ flower.title }}</h1>
+        {% if flower.description %}<div class="desc">{{ flower.description|linebreaksbr }}</div>{% endif %}
+        <div class="price">{{ flower.price }} сомони</div>
+
+        <div class="purchase">
+          <div class="counter" aria-label="Количество цветов">
+            <button type="button" id="decrease" aria-label="Уменьшить количество">−</button>
+            <output id="qty" aria-live="polite">1</output>
+            <button type="button" id="increase" aria-label="Увеличить количество">+</button>
+          </div>
+          <button type="button" class="buy" id="order-button">Заказать в WhatsApp</button>
+        </div>
+        <div class="total">Итого: <strong><span id="total">{{ flower.price }}</span> сомони</strong></div>
+
+        <div class="promises">
+          <div class="promise"><span class="promise-icon" aria-hidden="true">♧</span><span><strong>Доставка 2–3 часа</strong> по Душанбе. Подтверждение в WhatsApp.</span></div>
+          <div class="promise"><span class="promise-icon" aria-hidden="true">▣</span><span><strong>Фото перед отправкой.</strong> Можно заранее посмотреть готовый букет.</span></div>
+          <div class="promise"><span class="promise-icon" aria-hidden="true">♡</span><span><strong>Свежие цветы</strong> от флористов Lotus.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="below" aria-labelledby="care-heading">
+      <div class="care">
+        <h2 id="care-heading">Как ухаживать за букетом</h2>
+        <div class="care-item"><span class="circle">✂</span><div><strong>Подрежьте стебли</strong><p>По диагонали на 1–2 см, чтобы цветы лучше впитывали воду.</p></div></div>
+        <div class="care-item"><span class="circle">♢</span><div><strong>Поставьте в свежую воду</strong><p>Меняйте воду каждые 2 дня.</p></div></div>
+        <div class="care-item"><span class="circle">↻</span><div><strong>Обновляйте срез</strong><p>Каждые 3 дня обновляйте срез стеблей.</p></div></div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="container foot"><span>© 2026 Lotus · Душанбе</span><span>Ежедневно 8:00–23:00</span></div></footer>
+
+  <script>
+    (() => {
+      const flowerTitle = "{{ flower.title|escapejs }}";
+      const unitPrice = Number("{{ flower.price|unlocalize }}");
+      let quantity = 1;
+      const quantityEl = document.getElementById('qty');
+      const totalEl = document.getElementById('total');
+      function render() {
+        quantityEl.textContent = quantity;
+        totalEl.textContent = Number.isFinite(unitPrice)
+          ? (unitPrice * quantity).toLocaleString('ru-RU', { maximumFractionDigits: 2 })
+          : '—';
+      }
+      document.getElementById('decrease').addEventListener('click', () => { quantity = Math.max(1, quantity - 1); render(); });
+      document.getElementById('increase').addEventListener('click', () => { quantity = Math.min(999, quantity + 1); render(); });
+      document.getElementById('order-button').addEventListener('click', () => {
+        const total = Number.isFinite(unitPrice) ? `${(unitPrice * quantity).toFixed(2)} сомони` : 'уточнить';
+        const message = `Здравствуйте! Хочу заказать букет «${flowerTitle}».\nКоличество: ${quantity}\nИтого: ${total}`;
+        window.open(`https://wa.me/992750545471?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>

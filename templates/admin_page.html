@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление группами</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f7fb;
+        }
+
+        .card {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+        }
+
+        .group-link {
+            display: block;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #334155;
+            transition: 0.2s;
+        }
+
+        .group-link:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .permission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border: 1px solid #edf0f4;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #fff;
+        }
+
+        .permission-item:hover {
+            background: #f8fafc;
+        }
+
+        .permission-list {
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .form-check-input {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <h3 class="fw-bold mb-4">Управление группами</h3>
+
+    <!-- GROUPS -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="section-title mb-3">Группы</h5>
+
+            <div class="d-flex flex-wrap gap-2">
+                {% for group in groups %}
+                    <a href="{% url 'get_users_by_group' group.pk %}"
+                       class="group-link border">
+                        {{ group }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- GROUP USERS -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h5 class="section-title mb-3">
+                Пользователи группы
+            </h5>
+
+            {% if group_users %}
+                <div class="row g-2">
+                    {% for user in group_users %}
+                        <div class="col-md-4">
+                            <div class="border rounded-3 p-3 bg-light">
+                                {{ user }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted mb-0">
+                    Нет пользователей
+                </p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- PERMISSIONS -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="row g-4">
+
+            <!-- GROUP PERMISSIONS -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+
+                        <h5 class="section-title text-success mb-3">
+                            Разрешения группы
+                        </h5>
+
+                        <div class="permission-list">
+
+                            {% for permission in group_permissions %}
+                                <div class="permission-item">
+                                    <label for="permission-{{ permission.pk }}"
+                                           class="mb-0">
+                                        {{ permission.name }}
+                                    </label>
+
+                                    <input
+                                        type="checkbox"
+                                        id="permission-{{ permission.pk }}"
+                                        name="permissions"
+                                        value="{{ permission.pk }}"
+                                        class="form-check-input"
+                                        checked>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">
+                                    Нет разрешений
+                                </p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOT GROUP PERMISSIONS -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+
+                        <h5 class="section-title text-primary mb-3">
+                            Доступные разрешения
+                        </h5>
+
+                        <div class="permission-list">
+
+                            {% for permission in not_group_permissions %}
+                                <div class="permission-item">
+                                    <label for="permission-{{ permission.pk }}"
+                                           class="mb-0">
+                                        {{ permission.name }}
+                                    </label>
+
+                                    <input
+                                        type="checkbox"
+                                        id="permission-{{ permission.pk }}"
+                                        name="new_permissions"
+                                        value="{{ permission.pk }}"
+                                        class="form-check-input">
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">
+                                    Нет доступных разрешений
+                                </p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SAVE -->
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2">
+                Save
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

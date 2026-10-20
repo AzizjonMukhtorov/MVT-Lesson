@@ -1,0 +1,232 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | MiniStore</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fb;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 20px 7%;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-decoration: none;
+            color: #222;
+        }
+
+        .logo span {
+            color: #6366f1;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 38px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.03);
+        }
+
+        .login-card h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            letter-spacing: -0.8px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .error {
+            background: #fff1f2;
+            color: #dc2626;
+            border: 1px solid #fecdd3;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #e2e4e9;
+            border-radius: 9px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #6366f1;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #4f46e5;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .links a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 26px 22px;
+            }
+
+            .navbar {
+                padding: 18px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo">mini<span>store.</span></a>
+    </nav>
+
+    <main class="main">
+
+        <div class="login-card">
+
+            <h1>Welcome back</h1>
+            <p class="subtitle">
+                Sign in to your account to continue.
+            </p>
+            {{ error }}
+
+            {% if error %}
+                <div class="error">
+                   <p> {{ error }} </p>
+                </div>
+            {% endif %}
+
+            <form action="" method="post">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn">
+                    Login
+                </button>
+
+            </form>
+
+            <div class="links">
+                Don't have an account?
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        © 2026 MiniStore. All rights reserved.
+    </footer>
+
+</body>
+</html>
