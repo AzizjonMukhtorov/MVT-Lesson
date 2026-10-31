@@ -4,7 +4,8 @@ from .views import (home, get_flowers,
                     get_flower_by_id, 
                     create_like, delete_like, 
                     login_user, logout_user, admin_page,
-                    get_users_by_group)
+                    get_users_by_group, create_flower,
+                    create_category)
 
 
 urlpatterns = [
@@ -16,5 +17,7 @@ urlpatterns = [
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
     path('admin-page/', admin_page, name='admin_page'),
-    path('admin-page/<int:group_id>/', get_users_by_group, name='get_users_by_group')
+    path('admin-page/<int:group_id>/', get_users_by_group, name='get_users_by_group'),
+    path('create-flower/', create_flower, name='create_flower'),
+    path('create-category/', create_category, name='create_category')
 ]

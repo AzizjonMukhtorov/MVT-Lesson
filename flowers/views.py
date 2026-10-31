@@ -12,6 +12,8 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import permission_required, login_required
 
+from .forms import FlowersForm, CategoryForm
+
 from .apps import FlowersConfig
 
 from .models import Category, Flower, Likes
@@ -286,3 +288,34 @@ def delete_like(request, flower_id):
         return JsonResponse({'liked': False})
 
     return redirect('flowers')
+
+
+def create_flower(request):
+    
+    form = FlowersForm()
+    if request.method == 'POST':
+        form = FlowersForm(request.data)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        
+    return render(request, 'create_flower.html', context={'form': form})
+
+def create_category(request):
+    
+    form = CategoryForm()
+    
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES)
+  
+        if form.is_valid():
+            data = form.cleaned_data
+            print(data)
+            Category.objects.create(
+                title=data['title'],
+                image=data['image']
+            )
+            return redirect('home')
+        
+    return render(request, 'create_flower.html', context={'form': form})
